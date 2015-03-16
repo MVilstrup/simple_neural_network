@@ -77,7 +77,7 @@ class LogisticRegression(object):
             elif self.learning_type == "sgd":
                 # Fit to data with Stochastic Gradient Descent
                 for training_val, target_val in zip(training_data, targets):
-                    diff_val = self.activate(training_data)
+                    diff_val = self.activate(training_val)
                     error = (target_val - diff_val)
                     regularize = self.lambda_ * self.weights[1:]
                     self.weights[1:] += self.learning_rate * training_val.dot(error)
@@ -103,12 +103,12 @@ class LogisticRegression(object):
     def activate(self, training_data):
         """ Activate function using a sigmoid"""
         z = training_data.dot(self.weights[1:]) + self.weights[0]
-        return self_sigmoid(z)
+        return self._sigmoid(z)
 
     def _logit_cost(self, targets, target):
         """ Caluclate the logistic cost """
         logit = -targets.dot(np.log(target)) - ((1 - targets).dot(np.log(1 - target)))
-        regularize = (self.lamda_ / 2) * self.weights[1:].dot(self.weights[1:])
+        regularize = (self.lambda_ / 2) * self.weights[1:].dot(self.weights[1:])
         return logit + regularize
 
     def _sigmoid(self, z):

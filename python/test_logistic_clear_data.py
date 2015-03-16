@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from evaluate import plot_decision_regions
 from time import sleep
 import numpy as np
-from classifier import Adaline
+from classifier import LogisticRegression
 
 # The data downloaded is the classical example of iris flower calssification
 data_file = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data', header=None)
@@ -33,37 +33,27 @@ training_data_std[:,1] /= training_data[:,1].std()
 
 
 # Use Adaline with Gradient Descent
-ada = Adaline(passes=15, learning_rate=0.01, learning_type="gd")
+log_reg = LogisticRegression(learning_rate=0.01, 
+        passes=15, 
+        learning_type="gd",
+        lambda_=1)
+log_reg.fit(training_data_std, targets)
 
-ada.fit(training_data_std, targets)
-
-plot_decision_regions(training_data_std, targets, classifier=ada)
-plt.title("Adaline - Gradient Descent")
+plot_decision_regions(training_data_std, targets, classifier=log_reg)
+plt.title("Logistic Regression - Gradient Descent")
 plt.xlabel("Sepal length (standardized)")
 plt.ylabel("Petal length (standardized)")
-plt.show()
-
-
-plt.plot(range(1, len(ada.cost)+1), ada.cost, marker="o")
-plt.xlabel("Iterations")
-plt.ylabel("Missclassifications")
 plt.show()
 
 # Use Adaline with Stochastic gradient descent
+log_reg = LogisticRegression(learning_rate=0.01, 
+        passes=15, 
+        learning_type="sgd",
+        lambda_=0.6)
+log_reg.fit(training_data_std, targets)
 
-ada = Adaline(passes=15, learning_rate=0.01, learning_type="sgd")
-
-ada.fit(training_data_std, targets)
-
-plot_decision_regions(training_data_std, targets, classifier=ada)
-plt.title("Adaline - Stochastic Gradient Descent")
+plot_decision_regions(training_data_std, targets, classifier=log_reg)
+plt.title("Logistic Regression- Stochastic Gradient Descent")
 plt.xlabel("Sepal length (standardized)")
 plt.ylabel("Petal length (standardized)")
 plt.show()
-
-
-plt.plot(range(1, len(ada.cost)+1), ada.cost, marker="o")
-plt.xlabel("Iterations")
-plt.ylabel("Missclassifications")
-plt.show()
-
